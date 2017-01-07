@@ -18,6 +18,8 @@ const ops = {
 
     "&&": ([a, b, ...rest]) => [a && b, ...rest],
     "||": ([a, b, ...rest]) => [a || b, ...rest],
+
+    "print": (ls) => console.log(ls),
 }
 
 const tokenize = (str) =>

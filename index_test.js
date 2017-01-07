@@ -40,12 +40,13 @@ describe("compose", () => {
 
 describe("tokenize", () => {
     it("should split by whitespace", () => {
-        const tokens = tokenize("1 2 3 4")
+        const tokens = tokenize(`1 2   3
+             4`)
         assert.equal(4, tokens.length)
     })
 
     it("should characterize literals and functions", () => {
-        const tokens = tokenize("1 2 + 3 *")
+        const tokens = tokenize("1   2 +  3 *")
         assert.equal(5, tokens.length)
         assert.equal(3, tokens.filter(t => t.type === "Literal").length)
         assert.equal(2, tokens.filter(t => t.type === "Function").length)

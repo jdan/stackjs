@@ -5,6 +5,7 @@ const {
     ops,
     compose,
     tokenize,
+    evaluate,
 } = require("./index.js")
 
 describe("kestrel", () => {
@@ -28,8 +29,9 @@ describe("compose", () => {
     it("should compose a list of functions", () => {
         const addOne   = n => n + 1
         const timesTwo = n => n * 2
+        const oneThird = n => n / 3
 
-        assert.equal(compose([timesTwo, addOne])(6), 14)
+        assert.equal(compose([addOne, timesTwo, oneThird])(6), 5)
     })
 
     it("should work for a single function", () => {
@@ -67,5 +69,19 @@ describe("tokenize", () => {
         const tokens = tokenize("1   2 +  3 *")
         assert.equal(5, tokens.length)
         assert.equal(2, tokens.filter(t => t.type === "Literal").length)
+    })
+})
+
+describe("evaluate", () => {
+    it("should build a simple stack of numbers and strings", () => {
+        assert.deepEqual(
+            evaluate(`1 2 "hello world" 3 4`),
+            [4, 3, "hello world", 2, 1])
+    })
+
+    it("should evaluate functions within the stack", () => {
+        assert.equal(12, evaluate("4 3 * tap"))
+        assert.equal(7, evaluate("1 2 3 * * 1 + tap"))
+        assert.equal("hello, world!", evaluate(`"world!" "hello, " + tap`))
     })
 })

@@ -19,9 +19,11 @@ const ops = {
     "&&": ([a, b, ...rest]) => [a && b, ...rest],
     "||": ([a, b, ...rest]) => [a || b, ...rest],
 
+    "tap": ([a, ...rest]) => a,
     "print": (ls) => console.log(ls),
 }
 
+// parse an input string into a list of tokens
 const tokenize = (str) => {
     const tokens = [];
     let pos = 0;
@@ -84,9 +86,31 @@ const tokenize = (str) => {
     return tokens;
 }
 
+// evaluate a list of tokens
+//
+// note: we don't need to do any parsing yet since our programs
+// are a single statement
+const evaluate = (input) => {
+    const tokens = tokenize(input)
+
+    // All we need to do is map tokens to values
+    // Then revers everything (stacks are FIFO!)
+    // Then compose 'em with an empty stack as the input
+    return compose(tokens.map(token => {
+        if (token.type === "Number" || token.type === "String") {
+            return K(token.value)
+        } else if (ops.hasOwnProperty(token.value)) {
+            return ops[token.value]
+        } else {
+            throw `${token.value} is undefined (at position ${token.pos})`
+        }
+    }).reverse())([])
+}
+
 module.exports = {
     K,
     compose,
     ops,
     tokenize,
+    evaluate,
 }

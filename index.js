@@ -20,8 +20,24 @@ const ops = {
     "||": ([a, b, ...rest]) => [a || b, ...rest],
 }
 
+const tokenize = (str) =>
+    str.split(/\s+/).map(word => {
+        if (ops[word]) {
+            return {
+                type: "Function",
+                value: word,
+            }
+        } else {
+            return {
+                type: "Literal",
+                value: word,
+            }
+        }
+    })
+
 module.exports = {
     K,
     compose,
     ops,
+    tokenize,
 }

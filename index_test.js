@@ -45,10 +45,27 @@ describe("tokenize", () => {
         assert.equal(4, tokens.length)
     })
 
-    it("should characterize literals and functions", () => {
+    it("should identify numbers", () => {
         const tokens = tokenize("1   2 +  3 *")
         assert.equal(5, tokens.length)
-        assert.equal(3, tokens.filter(t => t.type === "Literal").length)
-        assert.equal(2, tokens.filter(t => t.type === "Function").length)
+        assert.equal(3, tokens.filter(t => t.type === "Number").length)
+    })
+
+    it("should identify strings", () => {
+        const tokens = tokenize(`"hello" 'wor"l"d' 32 "how are you"`)
+        assert.equal(4, tokens.length)
+        assert.equal(3, tokens.filter(t => t.type === "String").length)
+        assert.deepEqual(tokens.map(t => t.value), [
+            "hello",
+            "wor\"l\"d",
+            32,
+            "how are you",
+        ])
+    })
+
+    it("should identify literals", () => {
+        const tokens = tokenize("1   2 +  3 *")
+        assert.equal(5, tokens.length)
+        assert.equal(2, tokens.filter(t => t.type === "Literal").length)
     })
 })

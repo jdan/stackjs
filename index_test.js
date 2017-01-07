@@ -84,4 +84,10 @@ describe("evaluate", () => {
         assert.equal(7, evaluate("1 2 3 * * 1 + tap"))
         assert.equal("hello, world!", evaluate(`"world!" "hello, " + tap`))
     })
+
+    it("should error for undefined functions", () => {
+        assert.throws(() => {
+            evaluate("1 2 blah")
+        }, /blah is undefined \(at position 4\)/)
+    })
 })

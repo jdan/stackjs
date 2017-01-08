@@ -1,12 +1,12 @@
 // K(x)([y, z, ...]) => [x, y, z, ...]
 const K = x => ls => [x, ...ls]
 
-// compose(f, g, h)(x) = f(g(h(x)))
+// compose(f, g, h)(x) = h(g(f(x)))
 const compose = fns => fns
     .slice(1)
     .reduce((acc, fn) =>
         // Compose `acc` with `fn`
-        x => acc(fn(x)),
+        x => fn(acc(x)),
         fns[0])
 
 const ops = {
@@ -94,7 +94,6 @@ const evaluate = (input) => {
     const tokens = tokenize(input)
 
     // All we need to do is map tokens to values
-    // Then revers everything (stacks are FIFO!)
     // Then compose 'em with an empty stack as the input
     return compose(tokens.map(token => {
         if (token.type === "Number" || token.type === "String") {
@@ -104,7 +103,7 @@ const evaluate = (input) => {
         } else {
             throw `${token.value} is undefined (at position ${token.pos})`
         }
-    }).reverse())([])
+    }))([])
 }
 
 module.exports = {

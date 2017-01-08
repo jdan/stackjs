@@ -31,7 +31,7 @@ describe("compose", () => {
         const timesTwo = n => n * 2
         const oneThird = n => n / 3
 
-        assert.equal(compose([addOne, timesTwo, oneThird])(6), 5)
+        assert.equal(compose([oneThird, timesTwo, addOne])(6), 5)
     })
 
     it("should work for a single function", () => {
